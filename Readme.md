@@ -13,9 +13,11 @@
 
   ### Folder structure.
 
+        ├── constant                       # Define for define const
         ├── controller                     # Define for define handler endpoint
-        ├── config                         # Define connection to database, redis, minio, grpc
         ├── docs                           # Define documentation rest
+        ├── middleware                     # Define middleware jwt, auth, cors
+        ├── migration                      # Define for define sql
         ├── models                         # Define struct
         ├── pkg                            # Define function using general
         ├── repositories                   # Define data layer
