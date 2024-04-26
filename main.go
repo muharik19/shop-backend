@@ -14,7 +14,6 @@ import (
 
 	_ "github.com/muharik19/shop-backend/docs"
 	"github.com/muharik19/shop-backend/pkg/database"
-	logger "github.com/muharik19/shop-backend/pkg/logging"
 	"github.com/muharik19/shop-backend/pkg/util"
 	"github.com/muharik19/shop-backend/repositories"
 	"github.com/muharik19/shop-backend/routes"
@@ -39,9 +38,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	logger.Info(util.Getenv("GORM_CONNECTION"))
-	logger.Info(util.Getenv("HTTP_PORT"))
 
 	ctx := context.Background()
 

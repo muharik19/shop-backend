@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   app:
-    container_name: golang_container
+    container_name: shop-backend
     environment:
       - GORM_CONNECTION=${GORM_CONNECTION}
       - HTTP_PORT=${HTTP_PORT}
@@ -19,11 +19,11 @@ services:
     depends_on:
       - postgresdb
     networks:
-      - learning
+      - shopping
 
   postgresdb:
     image: postgres:latest
-    container_name: postgres_container
+    container_name: shop-postgres
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -35,12 +35,12 @@ services:
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     networks:
-      - learning
+      - shopping
 
 volumes:
   pg_data:
 
 # Networks to be created to facilitate communication between containers
 networks:
-  learning:
+  shopping:
     driver: bridge
