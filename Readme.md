@@ -34,6 +34,10 @@ Despite, it is possible to run this project in local machine Please follow this 
 - swag init for generate document swagger
 - Run apps gp to root project `go run main.go`.
 
+## Documentation API Swagger
+
+[Swagger](http://localhost:9090/swagger/index.html)
+
 ## Documentation API Postman
 
 [API](https://documenter.getpostman.com/view/4324137/2sA3Bt3Vee)
