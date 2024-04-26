@@ -1,0 +1,438 @@
+basePath: /v1
+definitions:
+  models.AuthLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.OrderProduct:
+    properties:
+      productId:
+        type: string
+      qty:
+        type: number
+    required:
+    - productId
+    - qty
+    type: object
+  models.OrderRegister:
+    properties:
+      payment:
+        type: boolean
+      products:
+        items:
+          $ref: '#/definitions/models.OrderProduct'
+        type: array
+      shopId:
+        type: string
+    required:
+    - payment
+    - products
+    - shopId
+    type: object
+  models.ProductRegister:
+    properties:
+      name:
+        minLength: 3
+        type: string
+      price:
+        type: number
+      shopId:
+        type: string
+      stock:
+        type: number
+    required:
+    - name
+    - price
+    - shopId
+    - stock
+    type: object
+  models.Response:
+    properties:
+      code:
+        type: integer
+      responseCode:
+        type: string
+      responseData: {}
+      responseDesc:
+        type: string
+    type: object
+  models.ShopRegister:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      name:
+        minLength: 3
+        type: string
+      phoneNumber:
+        type: string
+    required:
+    - address
+    - email
+    - name
+    - phoneNumber
+    type: object
+  models.UserRegister:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 3
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - phoneNumber
+    type: object
+  models.WarehouseActiveByCode:
+    properties:
+      active:
+        type: boolean
+    required:
+    - active
+    type: object
+  models.WarehouseRegister:
+    properties:
+      address:
+        type: string
+      name:
+        minLength: 3
+        type: string
+      shopId:
+        type: string
+    required:
+    - address
+    - name
+    - shopId
+    type: object
+  models.WarehouseStockRegister:
+    properties:
+      code:
+        type: string
+      invoice:
+        type: string
+    required:
+    - code
+    - invoice
+    type: object
+host: localhost:9090
+info:
+  contact: {}
+  description: This is a service reporting shopping.
+  title: Shop API
+  version: "1"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user
+      parameters:
+      - description: Auth
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Login a user
+      tags:
+      - auth
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Create a order
+      parameters:
+      - description: Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.OrderRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create a order
+      tags:
+      - orders
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: List a product
+      parameters:
+      - collectionFormat: multi
+        description: string collection
+        in: query
+        items:
+          type: string
+        name: collection
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: List a product
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create a product
+      parameters:
+      - description: Product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProductRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create a product
+      tags:
+      - products
+  /shops:
+    post:
+      consumes:
+      - application/json
+      description: Create a shop
+      parameters:
+      - description: Shop
+        in: body
+        name: shop
+        required: true
+        schema:
+          $ref: '#/definitions/models.ShopRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create a shop
+      tags:
+      - shops
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Create a user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create a user
+      tags:
+      - users
+  /warehouses:
+    post:
+      consumes:
+      - application/json
+      description: Create a warehouse
+      parameters:
+      - description: Warehouse
+        in: body
+        name: warehouse
+        required: true
+        schema:
+          $ref: '#/definitions/models.WarehouseRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create a warehouse
+      tags:
+      - warehouses
+  /warehouses/:code:
+    patch:
+      consumes:
+      - application/json
+      description: Active a warehouse
+      parameters:
+      - description: Warehouse
+        in: body
+        name: warehouse
+        required: true
+        schema:
+          $ref: '#/definitions/models.WarehouseActiveByCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Active a warehouse
+      tags:
+      - warehouses
+  /warehouses/stock:
+    post:
+      consumes:
+      - application/json
+      description: Create a warehouseStock
+      parameters:
+      - description: Warehouse
+        in: body
+        name: warehouse
+        required: true
+        schema:
+          $ref: '#/definitions/models.WarehouseStockRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Create a warehouseStock
+      tags:
+      - warehouses
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
